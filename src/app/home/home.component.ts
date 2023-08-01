@@ -20,8 +20,7 @@ import { HousingLocation } from 'src/app/housing-location';
     <section class="results">
       <app-housing-location 
         *ngFor="let housingLocation of housingLocationList"
-        [location]="housingLocation">
-      </app-housing-location>
+        [location]="housingLocation"/>
     </section>
   `,
   styleUrls: ['./home.component.css']

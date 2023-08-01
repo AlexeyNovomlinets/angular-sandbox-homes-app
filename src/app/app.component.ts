@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 
 @Component({
@@ -10,12 +11,12 @@ import { HomeComponent } from './home/home.component';
         <img class="brand-logo" src="./assets/logo.svg" alt="logo" aria-hidden="true" />
       </header>
       <section class="content">
-        <app-home></app-home>
+        <router-outlet/>
       </section>
     </main>
   `,
   styleUrls: ['./app.component.css'],
-  imports: [HomeComponent],
+  imports: [HomeComponent, RouterModule ],
 })
 export class AppComponent {
   // TODO: Deploy it to gh-pages
