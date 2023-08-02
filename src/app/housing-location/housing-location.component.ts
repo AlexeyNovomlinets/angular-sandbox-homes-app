@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HousingLocation } from '../housing-location';
+import { HousingLocation } from './housing-location';
 
 @Component({
   selector: 'app-housing-location',

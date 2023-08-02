@@ -2,8 +2,8 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { HousingLocation } from '../housing-location';
-import { HousingService } from '../housing.service';
+import { HousingLocation } from '../housing-location/housing-location';
+import { HousingService } from '../services/housing.service';
 
 @Component({
   selector: 'app-details',
@@ -11,7 +11,7 @@ import { HousingService } from '../housing.service';
   imports: [CommonModule, NgOptimizedImage, ReactiveFormsModule],
   template: `
     <article>
-      <img class="listing-photo" [ngSrc]="housingLocation?.photo || ''" width="400" height="600" priority/>
+      <img class="listing-photo" [src]="housingLocation?.photo"/>
       <section class="listing-heading">
         <h2 class="listing-heading">{{ housingLocation?.name }}</h2>
         <p class="listing-location">{{ housingLocation?.city }}, {{ housingLocation?.state }}</p>
@@ -43,7 +43,7 @@ import { HousingService } from '../housing.service';
   styleUrls: ['./details.component.css']
 })
 export class DetailsComponent {
-  public readonly housingLocation: HousingLocation | undefined;
+  public housingLocation: HousingLocation | undefined;
   public readonly applyForm = new FormGroup({
     firstName: new FormControl(''),
     lastName: new FormControl(''),
@@ -55,7 +55,9 @@ export class DetailsComponent {
     private readonly housingService: HousingService,
   ) {
     const id = Number(this.activetedRoute.snapshot.params['id']);
-    this.housingLocation = this.housingService.getHousingLocationById(id);
+    this.housingService.getHousingLocationById(id).then(housingLocation => {
+      this.housingLocation = housingLocation;
+    });
   }
 
   public submitApplication(): void {
