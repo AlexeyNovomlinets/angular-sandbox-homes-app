@@ -19,6 +19,5 @@ import { HomeComponent } from './home/home.component';
   imports: [HomeComponent, RouterModule ],
 })
 export class AppComponent {
-  // TODO: Deploy it to gh-pages
   title = signal('homes');
 }
