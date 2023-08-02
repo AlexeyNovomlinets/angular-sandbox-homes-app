@@ -1,5 +1,6 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { HousingLocation } from '../housing-location';
 import { HousingService } from '../housing.service';
@@ -7,7 +8,7 @@ import { HousingService } from '../housing.service';
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage],
+  imports: [CommonModule, NgOptimizedImage, ReactiveFormsModule],
   template: `
     <article>
       <img class="listing-photo" [ngSrc]="housingLocation?.photo || ''" width="400" height="600" priority/>
@@ -25,7 +26,17 @@ import { HousingService } from '../housing.service';
       </section>
       <section class="listing-apply">
         <h2 class="section-heading">Apply now to live here</h2>
-        <button class="primary" type="button">Apply now</button>
+        <form 
+          [formGroup]="applyForm"
+          (submit)="submitApplication()">
+          <label for="first-name">First Name</label>
+          <input id="first-name" type="text" formControlName="firstName"/>
+          <label for="last-name">Last Name</label>
+          <input id="last-name" type="text" formControlName="lastName"/>
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email"/>
+          <button class="primary" type="submit">Apply now</button>
+        </form>
       </section>
     </article>
   `,
@@ -33,6 +44,11 @@ import { HousingService } from '../housing.service';
 })
 export class DetailsComponent {
   public readonly housingLocation: HousingLocation | undefined;
+  public readonly applyForm = new FormGroup({
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
+    email: new FormControl(''),
+  });
 
   constructor(
     private readonly activetedRoute: ActivatedRoute,
@@ -40,5 +56,13 @@ export class DetailsComponent {
   ) {
     const id = Number(this.activetedRoute.snapshot.params['id']);
     this.housingLocation = this.housingService.getHousingLocationById(id);
+  }
+
+  public submitApplication(): void {
+    this.housingService.submitApplication(
+      this.applyForm.value.firstName ?? '',
+      this.applyForm.value.lastName ?? '',
+      this.applyForm.value.email ?? '',
+    );
   }
 }
